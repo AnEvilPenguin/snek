@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://b5ddevfrwr0q3"]
+
+[ext_resource type="Script" path="res://SnekHead.cs" id="1_gnshr"]
+[ext_resource type="Texture2D" uid="uid://uh7dllyig8n7" path="res://icon.svg" id="1_wgmni"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_teq34"]
+size = Vector2(64, 64)
+
+[node name="SnekHead" type="Area2D"]
+script = ExtResource("1_gnshr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_wgmni")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_teq34")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]

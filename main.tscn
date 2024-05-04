@@ -1,12 +1,12 @@
 [gd_scene load_steps=2 format=3 uid="uid://g46nneriyli7"]
 
-[ext_resource type="PackedScene" uid="uid://c8bkwbimy348p" path="res://player.tscn" id="1_mcm3e"]
+[ext_resource type="PackedScene" uid="uid://b5ddevfrwr0q3" path="res://snek_head.tscn" id="1_pmwe5"]
 
 [node name="Main" type="Node"]
-
-[node name="SnekNode" parent="." instance=ExtResource("1_mcm3e")]
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
-[connection signal="timeout" from="Timer" to="SnekNode" method="OnTimerTimeout"]
+[node name="SnekHead" parent="." instance=ExtResource("1_pmwe5")]
+
+[connection signal="timeout" from="Timer" to="SnekHead" method="OnTimerTimeout"]
