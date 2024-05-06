@@ -146,7 +146,7 @@ public partial class SnekHead : Area2D
             this.AddChild(body);
         }
 
-        if(this._lastBody == null)
+        if (this._lastBody == null)
         {
             this._lastBody = body;
         }

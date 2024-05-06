@@ -1,11 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://osmnwa0lach1"]
+[gd_scene load_steps=5 format=3 uid="uid://osmnwa0lach1"]
 
 [ext_resource type="Script" path="res://SnekBody.cs" id="1_y5o1j"]
 [ext_resource type="Texture2D" uid="uid://c7f7jqvn66vdg" path="res://Art/snake_body.svg" id="2_uhkfg"]
+[ext_resource type="Texture2D" uid="uid://k6ptwme6cl88" path="res://Art/snake_tail.svg" id="3_63apn"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4q7uv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_uhkfg")
+}],
+"loop": true,
+"name": &"body",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_63apn")
+}],
+"loop": true,
+"name": &"tail",
+"speed": 5.0
+}]
 
 [node name="SnekBody" type="Area2D"]
 collision_mask = 0
 script = ExtResource("1_y5o1j")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_uhkfg")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_4q7uv")
+animation = &"tail"

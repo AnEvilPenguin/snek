@@ -22,6 +22,8 @@ public partial class SnekBody : Area2D
 
     private Queue<Vector2> _movement = new Queue<Vector2>();
 
+    private AnimatedSprite2D _sprite;
+
     // private Vector2 _previousPosition = Vector2.Zero;
 
     // Called when the node enters the scene tree for the first time.
@@ -30,9 +32,11 @@ public partial class SnekBody : Area2D
         // When spawned initial move is to stay still
         // this._movement.Enqueue(Vector2.Zero);
         GD.Print("Spawning body at " + this.Position.ToString());
-        
+
         this.initialPosition = this.Position;
         this.Visible = false;
+
+        _sprite = this.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -47,20 +51,20 @@ public partial class SnekBody : Area2D
 
     public void AddBody(SnekBody body)
     {
-        body.Position = Vector2.Left * this._tileSize;
         this.IsTail = false;
+        this._sprite.Play("body");
+
         this.NextBody = body;
         this.AddChild(body);
     }
 
     public void ExecuteMovement()
     {
-        // TODO unfuck movement
-        // TODO keep track of movement better (Go back to queue?)
         if (this._movement.Count == 0)
         {
             return;
         }
+
         Vector2 nextDirection = this._movement.Dequeue();
 
         if (nextDirection == Vector2.Zero)
