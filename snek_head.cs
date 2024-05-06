@@ -5,7 +5,7 @@ using static Godot.Control;
 /// <summary>
 /// The head of our snake. Processes all user controls and 'drives' the snake.
 /// </summary>
-public partial class SnekHead : Area2D
+public partial class snek_head : Area2D
 {
     [Export]
     protected int _tileSize = 64;
@@ -105,9 +105,15 @@ public partial class SnekHead : Area2D
             return;
         }
 
+        GD.Print("Head Position: " + this.Position.ToString());
+
         Vector2 movement = this.CalculateMovement(this._nextDirection);
 
+        GD.Print("Head Executing movement " + movement.ToString());
+
         this.Position = movement + this.Position;
+
+        GD.Print("Head new position: " + this.Position.ToString());
 
         if (this.NextBody != null)
         {
@@ -139,7 +145,7 @@ public partial class SnekHead : Area2D
             this.AddChild(body);
         }
 
-        if(this._lastBody == null)
+        if (this._lastBody == null)
         {
             this._lastBody = body;
         }

@@ -13,4 +13,10 @@ public partial class BodyPart : Area2D
         get { return this._next; }
         set { this._next = value; }
     }
+
+    public Vector2 CalculateMovement(Vector2 direction)
+    {
+        Vector2 movement = direction * this._tileSize;
+        return new Vector2(movement.X, movement.Y);
+    }
 }
