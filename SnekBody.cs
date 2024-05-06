@@ -3,37 +3,23 @@ using System.Collections.Generic;
 using Godot;
 using static Godot.Control;
 
-public partial class SnekBody : Area2D
+public partial class SnekBody : BodyPart
 {
     [Export]
     public bool IsTail = true;
 
-    [Export]
-    protected int _tileSize = 64;
-
-    public SnekBody _next;
-    public SnekBody NextBody
-    {
-        get { return this._next; }
-        set { this._next = value; }
-    }
-
-    private Vector2 initialPosition;
-
     private Queue<Vector2> _movement = new Queue<Vector2>();
 
     private AnimatedSprite2D _sprite;
+
+    private Turn _direction;
 
     // private Vector2 _previousPosition = Vector2.Zero;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        // When spawned initial move is to stay still
-        // this._movement.Enqueue(Vector2.Zero);
-        GD.Print("Spawning body at " + this.Position.ToString());
-
-        this.initialPosition = this.Position;
+        // We spawn under last body segment
         this.Visible = false;
 
         _sprite = this.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
@@ -44,9 +30,28 @@ public partial class SnekBody : Area2D
     {
     }
 
-    public void AddMovement(Vector2 movement)
+    private void turnSprite(Turn turn)
+    {
+        if (this.IsTail)
+        {
+            return;
+        }
+
+        if (turn == Turn.Stright)
+        {
+            _sprite.Play("body");
+            return;
+        }
+
+        _sprite.Play("corner");
+
+        _sprite.FlipH = turn == Turn.Clockwise;
+    }
+
+    public void AddMovement(Vector2 movement, Turn directon)
     {
         this._movement.Enqueue(new Vector2(movement.X, movement.Y));
+        this._direction = directon;
     }
 
     public void AddBody(SnekBody body)
@@ -66,6 +71,8 @@ public partial class SnekBody : Area2D
         }
 
         Vector2 nextDirection = this._movement.Dequeue();
+        turnSprite(_direction);
+        RotateSprite(nextDirection, _sprite);
 
         if (nextDirection == Vector2.Zero)
         {
@@ -77,22 +84,16 @@ public partial class SnekBody : Area2D
             this.Visible = true;
         }
 
-        GD.Print("Body Position: " + this.Position.ToString());
-
         Vector2 movement = (nextDirection * -1) * this._tileSize;
 
-        GD.Print("Body Executing movement " + movement.ToString());
-
         this.Position = movement;
-
-        GD.Print("Body New Position: " + this.Position.ToString());
 
         // this.Rotate(Mathf.Pi / 2);
 
         if (this.NextBody != null)
         {
             this.NextBody.ExecuteMovement();
-            this.NextBody.AddMovement(nextDirection);
+            this.NextBody.AddMovement(nextDirection, _direction);
         }
     }
 }

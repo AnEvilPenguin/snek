@@ -5,25 +5,9 @@ using static Godot.Control;
 /// <summary>
 /// The head of our snake. Processes all user controls and 'drives' the snake.
 /// </summary>
-public partial class SnekHead : Area2D
+public partial class SnekHead : BodyPart
 {
-    [Export]
-    protected int _tileSize = 64;
-
-    protected SnekBody _next;
-
-    public SnekBody NextBody
-    {
-        get { return this._next; }
-        set { this._next = value; }
-    }
-
-    public Vector2 CalculateMovement(Vector2 direction)
-    {
-        Vector2 movement = direction * this._tileSize;
-        return new Vector2(movement.X, movement.Y);
-    }
-
+    private Sprite2D _sprite;
 
     /// <summary>
     /// The next direction our snake will travel in.
@@ -39,6 +23,8 @@ public partial class SnekHead : Area2D
     /// The last unit of snake body (tip of the tail).
     /// </summary>
     private SnekBody _lastBody;
+
+    private Turn _turn;
 
     [Export]
     private int _initialBodyLength = 2;
@@ -60,7 +46,7 @@ public partial class SnekHead : Area2D
         // This centers the player on the tile
         this.Position += Vector2.One * this._tileSize / 2;
 
-        GD.Print("Spawning head at " + this.Position.ToString());
+        _sprite = this.GetNode<Sprite2D>("Sprite2D");
 
         for (int i = 0; i < this._initialBodyLength; i++)
         {
@@ -74,29 +60,43 @@ public partial class SnekHead : Area2D
     /// <param name="delta">The elapsed time since the previous frame.</param>
     public override void _Process(double delta)
     {
-        if (Input.IsActionPressed("ui_left"))
+        if (this._previousDirection + this._nextDirection == Vector2.Zero)
+        {
+            this._nextDirection = this._previousDirection;
+        }
+
+        if (Input.IsActionPressed("ui_left") && this._previousDirection != Vector2.Right)
         {
             this._nextDirection = Vector2.Left;
         }
 
-        if (Input.IsActionPressed("ui_right"))
+        if (Input.IsActionPressed("ui_right") && this._previousDirection != Vector2.Left)
         {
             this._nextDirection = Vector2.Right;
         }
 
-        if (Input.IsActionPressed("ui_down"))
+        if (Input.IsActionPressed("ui_down") && this._previousDirection != Vector2.Up)
         {
             this._nextDirection = Vector2.Down;
         }
 
-        if (Input.IsActionPressed("ui_up"))
+        if (Input.IsActionPressed("ui_up") && this._previousDirection != Vector2.Down)
         {
             this._nextDirection = Vector2.Up;
         }
+    }
 
-        if (this._previousDirection + this._nextDirection == Vector2.Zero)
+    public Turn GetTurnType()
+    {
+        int x = (int)(_nextDirection.X - _previousDirection.X);
+        int y = (int)(_nextDirection.Y + _previousDirection.Y);
+        int turn = x * y;
+
+        switch (turn)
         {
-            this._nextDirection = this._previousDirection;
+            case 1: return Turn.CounterClockwise;
+            case -1: return Turn.Clockwise;
+            default: return Turn.Stright;
         }
     }
 
@@ -110,15 +110,16 @@ public partial class SnekHead : Area2D
             return;
         }
 
-
-
         Vector2 movement = this.CalculateMovement(this._nextDirection);
+
+        Turn direction = GetTurnType();
+        RotateSprite(this._nextDirection, _sprite);
 
         this.Position = movement + this.Position;
 
         if (this.NextBody != null)
         {
-            this.NextBody.AddMovement(this._nextDirection);
+            this.NextBody.AddMovement(this._nextDirection, direction);
             this.NextBody.ExecuteMovement();
         }
 

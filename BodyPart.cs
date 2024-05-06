@@ -8,6 +8,13 @@ public partial class BodyPart : Area2D
 
     protected SnekBody _next;
 
+    public enum Turn
+    {
+        Clockwise,
+        CounterClockwise,
+        Stright,
+    }
+
     public SnekBody NextBody
     {
         get { return this._next; }
@@ -18,5 +25,25 @@ public partial class BodyPart : Area2D
     {
         Vector2 movement = direction * this._tileSize;
         return new Vector2(movement.X, movement.Y);
+    }
+
+    protected void RotateSprite(Vector2 direction, Node2D sprite)
+    {
+        if (direction == Vector2.Right)
+        {
+            sprite.RotationDegrees = 90;
+        }
+        else if (direction == Vector2.Down)
+        {
+            sprite.RotationDegrees = 180;
+        }
+        else if (direction == Vector2.Left)
+        {
+            sprite.RotationDegrees = 270;
+        }
+        else
+        {
+            sprite.RotationDegrees = 0;
+        }
     }
 }
