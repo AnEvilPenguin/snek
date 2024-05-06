@@ -93,6 +93,11 @@ public partial class SnekHead : Area2D
         {
             this._nextDirection = Vector2.Up;
         }
+
+        if (this._previousDirection + this._nextDirection == Vector2.Zero)
+        {
+            this._nextDirection = this._previousDirection;
+        }
     }
 
     /// <summary>
@@ -104,6 +109,8 @@ public partial class SnekHead : Area2D
         {
             return;
         }
+
+
 
         Vector2 movement = this.CalculateMovement(this._nextDirection);
 
