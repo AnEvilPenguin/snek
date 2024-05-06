@@ -46,4 +46,18 @@ public partial class BodyPart : Area2D
             sprite.RotationDegrees = 0;
         }
     }
+
+    protected void EndGame()
+    {
+        Hide(); // Player disappears after being hit.
+        // Must be deferred as we can't change physics properties on a physics callback.
+        GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+
+        if (_next == null)
+        {
+            return;
+        }
+
+        _next.EndGame();
+    }
 }

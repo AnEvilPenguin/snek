@@ -7,6 +7,9 @@ using static Godot.Control;
 /// </summary>
 public partial class SnekHead : BodyPart
 {
+    [Signal]
+    public delegate void EndEventHandler();
+
     private Sprite2D _sprite;
 
     /// <summary>
@@ -54,12 +57,32 @@ public partial class SnekHead : BodyPart
         }
     }
 
+    private void ProcessOverlap()
+    {
+        var areas = this.GetOverlappingAreas();
+
+        foreach (Area2D area in areas)
+        {
+            if (area.Name == "SnekBody")
+            {
+                this.EndGame();
+                EmitSignal(SignalName.End);
+            }
+        }
+    }
+
     /// <summary>
     /// Called every frame.
     /// </summary>
     /// <param name="delta">The elapsed time since the previous frame.</param>
     public override void _Process(double delta)
     {
+        if (this.HasOverlappingAreas())
+        {
+            ProcessOverlap();
+
+        }
+
         if (this._previousDirection + this._nextDirection == Vector2.Zero)
         {
             this._nextDirection = this._previousDirection;

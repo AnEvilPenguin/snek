@@ -1,14 +1,35 @@
-[gd_scene load_steps=3 format=3 uid="uid://g46nneriyli7"]
+[gd_scene load_steps=4 format=3 uid="uid://g46nneriyli7"]
 
+[ext_resource type="Script" path="res://Main.cs" id="1_4hk6l"]
 [ext_resource type="PackedScene" uid="uid://b5ddevfrwr0q3" path="res://snek_head.tscn" id="1_pmwe5"]
 [ext_resource type="PackedScene" uid="uid://osmnwa0lach1" path="res://snek_body.tscn" id="2_2e8cm"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_4hk6l")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
 [node name="SnekHead" parent="." instance=ExtResource("1_pmwe5")]
+position = Vector2(272, 383)
 BodyScene = ExtResource("2_2e8cm")
 
+[node name="Label" type="Label" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.5
+offset_top = -11.5
+offset_right = 43.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Game Over"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="timeout" from="Timer" to="SnekHead" method="OnTimerTimeout"]
+[connection signal="End" from="SnekHead" to="." method="OnSnekHeadEnd"]
