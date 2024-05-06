@@ -8,7 +8,7 @@ using static Godot.Control;
 public partial class SnekHead : BodyPart
 {
     [Signal]
-    public delegate void EndEventHandler();
+    public delegate void EndEventHandler(string kind);
 
     private Sprite2D _sprite;
 
@@ -66,7 +66,13 @@ public partial class SnekHead : BodyPart
             if (area.Name == "SnekBody")
             {
                 this.EndGame();
-                EmitSignal(SignalName.End);
+                EmitSignal(SignalName.End, "Ouroboros");
+            }
+
+            if (area.Name == "OutOfBounds")
+            {
+                this.EndGame();
+                EmitSignal(SignalName.End, "Out of Bounds");
             }
         }
     }
@@ -80,7 +86,6 @@ public partial class SnekHead : BodyPart
         if (this.HasOverlappingAreas())
         {
             ProcessOverlap();
-
         }
 
         if (this._previousDirection + this._nextDirection == Vector2.Zero)

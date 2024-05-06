@@ -31,5 +31,13 @@ text = "Game Over"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="OutOfBounds" type="Area2D" parent="."]
+visible = false
+
+[node name="OutOfBoundsCollisionPoly" type="CollisionPolygon2D" parent="OutOfBounds"]
+visible = false
+position = Vector2(-4, 0)
+polygon = PackedVector2Array(4, 0, -2, -6, 588, -6, 588, 839, -1, 838, -2, -4, 4, 2, 4, 832, 580, 832, 580, 0)
+
 [connection signal="timeout" from="Timer" to="SnekHead" method="OnTimerTimeout"]
 [connection signal="End" from="SnekHead" to="." method="OnSnekHeadEnd"]
