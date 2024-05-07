@@ -18,6 +18,8 @@ public partial class Main : Node
 
     private SnekHead _head;
 
+    private Timer _timer;
+
     private void OnSnekHeadEnd(string type)
     {
         var label = this.GetNode<Label>("Label");
@@ -70,6 +72,11 @@ public partial class Main : Node
         _currentMouse.Position = newMouseLocation();
         _score++;
 
+        if (_score % 5 == 0 && _timer.WaitTime > 0.1)
+        {
+            _timer.WaitTime = _timer.WaitTime - 0.1;
+        }
+
         // If overlapping move it?
         // Could also just check for Snek positioning and re-roll if that fails?
     }
@@ -91,6 +98,7 @@ public partial class Main : Node
         _windowSize = GetTree().Root.Size;
 
         _head = this.GetNode<SnekHead>("SnekHead");
+        _timer = this.GetNode<Timer>("Timer");
 
         SpawnMouse();
     }
