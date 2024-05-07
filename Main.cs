@@ -39,8 +39,8 @@ public partial class Main : Node
             GD.PrintErr("Failed to get new mouse location");
         }
 
-        var x = _random.Next((int)_windowSize.X - 2) + 1;
-        var y = _random.Next((int)_windowSize.Y - 2) + 1;
+        var x = _random.Next((int)_windowSize.X - 66) + 1;
+        var y = _random.Next((int)_windowSize.Y - 66) + 1;
 
         var position = Util.GetSnappedPosition(x, y);
 
