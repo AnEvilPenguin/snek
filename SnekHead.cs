@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Godot;
+using Snek;
 using static Godot.Control;
 
 /// <summary>
@@ -49,11 +50,7 @@ public partial class SnekHead : BodyPart
     /// </summary>
     public override void _Ready()
     {
-        // Snapped allows us to round the position to the nearest element
-        this.Position = this.Position.Snapped(Vector2.One * this._tileSize);
-
-        // This centers the player on the tile
-        this.Position += Vector2.One * this._tileSize / 2;
+        this.Position = Util.GetSnappedPosition(this.Position);
 
         _sprite = this.GetNode<Sprite2D>("Sprite2D");
 
