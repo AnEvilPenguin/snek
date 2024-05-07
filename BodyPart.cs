@@ -1,5 +1,6 @@
 ﻿using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class BodyPart : Area2D
 {
@@ -59,5 +60,25 @@ public partial class BodyPart : Area2D
         }
 
         _next.EndGame();
+    }
+
+    public List<Vector2> ListPositions()
+    {
+        var list = new List<Vector2>();
+
+        return ListPositions(list, Vector2.Zero);
+    }
+
+    public List<Vector2> ListPositions(List<Vector2> accumulator, Vector2 relative)
+    {
+        var myPosition = this.Position + relative;
+        accumulator.Add(myPosition);
+
+        if (_next == null)
+        {
+            return accumulator;
+        }
+
+        return _next.ListPositions(accumulator, myPosition);
     }
 }

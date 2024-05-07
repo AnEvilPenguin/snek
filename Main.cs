@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 using Snek;
 
@@ -29,9 +30,9 @@ public partial class Main : Node
     }
 
     private Vector2 newMouseLocation() =>
-        newMouseLocation(0);
+        newMouseLocation(0, _head.ListPositions());
 
-    private Vector2 newMouseLocation(int depth)
+    private Vector2 newMouseLocation(int depth, List<Vector2> snakePositions)
     {
         if (depth > 10)
         {
@@ -43,14 +44,22 @@ public partial class Main : Node
 
         var position = Util.GetSnappedPosition(x, y);
 
-        if (position == _currentMouse.Position)
+        if (depth > 10)
         {
-            return newMouseLocation(depth + 1);
+            // FIXME probably need a better way of handling this.
+            GD.PrintErr("Failed to get new mouse location");
+
+            return position;
         }
 
-        if (position == _head.Position)
+        if (snakePositions.Contains(position))
         {
-            return newMouseLocation(depth + 1);
+            return newMouseLocation(depth + 1, snakePositions);
+        }
+
+        if (position == _currentMouse.Position)
+        {
+            return newMouseLocation(depth + 1, snakePositions);
         }
 
         return position;
