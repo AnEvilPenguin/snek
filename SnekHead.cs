@@ -166,11 +166,10 @@ public partial class SnekHead : BodyPart
         SnekBody body = this.BodyScene.Instantiate<SnekBody>();
 
         body.Position = new Vector2(spawnLocation.X, spawnLocation.Y);
-        GD.Print("Moving body to " + body.Position.ToString());
 
         if (this.NextBody == null)
         {
-            body.Position = Vector2.Left * this._tileSize;
+
             this.NextBody = body;
             this.AddChild(body);
         }
