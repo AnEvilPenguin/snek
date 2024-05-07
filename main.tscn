@@ -14,6 +14,7 @@ autostart = true
 
 [node name="SnekHead" parent="." instance=ExtResource("1_pmwe5")]
 position = Vector2(272, 383)
+_initialBodyLength = 2
 BodyScene = ExtResource("2_2e8cm")
 
 [node name="Label" type="Label" parent="."]
