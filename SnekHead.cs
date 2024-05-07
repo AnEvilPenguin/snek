@@ -56,7 +56,8 @@ public partial class SnekHead : BodyPart
 
         for (int i = 0; i < this._initialBodyLength; i++)
         {
-            this.AddBody();
+            var newBody = this.NewBody();
+            newBody.Position = new Vector2(-5000, -5000);
         }
     }
 
@@ -81,7 +82,7 @@ public partial class SnekHead : BodyPart
             if (area.Name == "Mouse" && !_hasEaten)
             {
                 EmitSignal(SignalName.AteMouse);
-                this.AddBody();
+                this.NewBody();
 
                 _hasEaten = true;
             }
@@ -175,19 +176,16 @@ public partial class SnekHead : BodyPart
     /// <summary>
     /// Used to spawn a new body segment.
     /// </summary>
-    private void AddBody()
+    private SnekBody NewBody()
     {
-        Vector2 spawnLocation = this._lastBody != null ?
-            this._lastBody.Position :
-            this.Position;
-
         SnekBody body = this.BodyScene.Instantiate<SnekBody>();
 
-        body.Position = new Vector2(spawnLocation.X, spawnLocation.Y);
+        body.Position = this._lastBody != null ?
+                    this._lastBody.Position :
+                    this.Position; ;
 
         if (this.NextBody == null)
         {
-
             this.NextBody = body;
             this.AddChild(body);
         }
@@ -201,5 +199,7 @@ public partial class SnekHead : BodyPart
             this._lastBody.AddBody(body);
             this._lastBody = body;
         }
+
+        return body;
     }
 }
