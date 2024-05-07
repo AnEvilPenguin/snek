@@ -15,6 +15,8 @@ public partial class Main : Node
 
     private Random _random = new Random();
 
+    private SnekHead _head;
+
     private void OnSnekHeadEnd(string type)
     {
         var label = this.GetNode<Label>("Label");
@@ -34,6 +36,11 @@ public partial class Main : Node
         var position = Util.GetSnappedPosition(x, y);
 
         if (position == _currentMouse.Position)
+        {
+            return newMouseLocation();
+        }
+
+        if (position == _head.Position)
         {
             return newMouseLocation();
         }
@@ -65,6 +72,9 @@ public partial class Main : Node
     public override void _Ready()
     {
         _windowSize = GetTree().Root.Size;
+
+        _head = this.GetNode<SnekHead>("SnekHead");
+
         SpawnMouse();
     }
 }
