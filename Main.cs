@@ -28,8 +28,16 @@ public partial class Main : Node
 
     }
 
-    private Vector2 newMouseLocation()
+    private Vector2 newMouseLocation() =>
+        newMouseLocation(0);
+
+    private Vector2 newMouseLocation(int depth)
     {
+        if (depth > 10)
+        {
+            GD.PrintErr("Failed to get new mouse location");
+        }
+
         var x = _random.Next((int)_windowSize.X - 1);
         var y = _random.Next((int)_windowSize.X - 1);
 
@@ -37,12 +45,12 @@ public partial class Main : Node
 
         if (position == _currentMouse.Position)
         {
-            return newMouseLocation();
+            return newMouseLocation(depth + 1);
         }
 
         if (position == _head.Position)
         {
-            return newMouseLocation();
+            return newMouseLocation(depth + 1);
         }
 
         return position;
