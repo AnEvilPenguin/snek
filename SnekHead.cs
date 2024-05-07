@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Godot;
 using static Godot.Control;
 
@@ -10,7 +11,12 @@ public partial class SnekHead : BodyPart
     [Signal]
     public delegate void EndEventHandler(string kind);
 
+    [Signal]
+    public delegate void AteMouseEventHandler();
+
     private Sprite2D _sprite;
+
+    private Boolean _hasEaten = false;
 
     /// <summary>
     /// The next direction our snake will travel in.
@@ -74,6 +80,14 @@ public partial class SnekHead : BodyPart
                 this.EndGame();
                 EmitSignal(SignalName.End, "Out of Bounds");
             }
+
+            if (area.Name == "Mouse" && !_hasEaten)
+            {
+                EmitSignal(SignalName.AteMouse);
+                this.AddBody();
+
+                _hasEaten = true;
+            }
         }
     }
 
@@ -85,7 +99,7 @@ public partial class SnekHead : BodyPart
     {
         if (this.HasOverlappingAreas())
         {
-            ProcessOverlap();
+            this.ProcessOverlap();
         }
 
         if (this._previousDirection + this._nextDirection == Vector2.Zero)
@@ -133,6 +147,8 @@ public partial class SnekHead : BodyPart
     /// </summary>
     public void OnTimerTimeout()
     {
+        _hasEaten = false;
+
         if (this._nextDirection == Vector2.Zero)
         {
             return;
@@ -152,6 +168,11 @@ public partial class SnekHead : BodyPart
         }
 
         this._previousDirection = this._nextDirection;
+
+        if (this.HasOverlappingAreas())
+        {
+            ProcessOverlap();
+        }
     }
 
     /// <summary>

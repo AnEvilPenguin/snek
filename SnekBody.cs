@@ -20,7 +20,7 @@ public partial class SnekBody : BodyPart
     public override void _Ready()
     {
         // We spawn under last body segment
-        this.Visible = false;
+        // this.Visible = false;
 
         _sprite = this.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
     }
@@ -28,6 +28,11 @@ public partial class SnekBody : BodyPart
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
+    }
+
+    public void Rotate(float rotation)
+    {
+        _sprite.Rotation = rotation;
     }
 
     private void turnSprite(Turn turn)
@@ -57,10 +62,12 @@ public partial class SnekBody : BodyPart
     public void AddBody(SnekBody body)
     {
         this.IsTail = false;
-        this._sprite.Play("body");
 
         this.NextBody = body;
         this.AddChild(body);
+
+        body.Rotate(_sprite.Rotation);
+        this._sprite.Play("body");
     }
 
     public void ExecuteMovement()
@@ -71,8 +78,6 @@ public partial class SnekBody : BodyPart
         }
 
         Vector2 nextDirection = this._movement.Dequeue();
-        turnSprite(_direction);
-        RotateSprite(nextDirection, _sprite);
 
         if (nextDirection == Vector2.Zero)
         {
@@ -83,6 +88,9 @@ public partial class SnekBody : BodyPart
         {
             this.Visible = true;
         }
+
+        turnSprite(_direction);
+        RotateSprite(nextDirection, _sprite);
 
         Vector2 movement = (nextDirection * -1) * this._tileSize;
 

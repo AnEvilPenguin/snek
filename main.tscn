@@ -1,11 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://g46nneriyli7"]
+[gd_scene load_steps=5 format=3 uid="uid://g46nneriyli7"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_4hk6l"]
 [ext_resource type="PackedScene" uid="uid://b5ddevfrwr0q3" path="res://snek_head.tscn" id="1_pmwe5"]
 [ext_resource type="PackedScene" uid="uid://osmnwa0lach1" path="res://snek_body.tscn" id="2_2e8cm"]
+[ext_resource type="PackedScene" uid="uid://budco0xour48g" path="res://mouse.tscn" id="2_uo4fu"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_4hk6l")
+MouseScene = ExtResource("2_uo4fu")
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
@@ -40,4 +42,5 @@ position = Vector2(-4, 0)
 polygon = PackedVector2Array(4, 0, -2, -6, 588, -6, 588, 839, -1, 838, -2, -4, 4, 2, 4, 832, 580, 832, 580, 0)
 
 [connection signal="timeout" from="Timer" to="SnekHead" method="OnTimerTimeout"]
+[connection signal="AteMouse" from="SnekHead" to="." method="OnSnekHeadAteMouseEvent"]
 [connection signal="End" from="SnekHead" to="." method="OnSnekHeadEnd"]
