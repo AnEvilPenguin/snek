@@ -40,7 +40,7 @@ public partial class Main : Node
         }
 
         var x = _random.Next((int)_windowSize.X - 2) + 1;
-        var y = _random.Next((int)_windowSize.X - 2) + 1;
+        var y = _random.Next((int)_windowSize.Y - 2) + 1;
 
         var position = Util.GetSnappedPosition(x, y);
 
