@@ -1,15 +1,15 @@
 [gd_scene load_steps=7 format=3 uid="uid://osmnwa0lach1"]
 
 [ext_resource type="Script" path="res://SnekBody.cs" id="1_y5o1j"]
-[ext_resource type="Texture2D" uid="uid://c7f7jqvn66vdg" path="res://Art/snake_body.svg" id="2_uhkfg"]
-[ext_resource type="Texture2D" uid="uid://k6ptwme6cl88" path="res://Art/snake_tail.svg" id="3_63apn"]
-[ext_resource type="Texture2D" uid="uid://6xdc5gskglea" path="res://Art/snake_body_turn.svg" id="3_li8rc"]
+[ext_resource type="Texture2D" uid="uid://s8gw2sewddu0" path="res://Art/snake_body.png" id="2_uhhok"]
+[ext_resource type="Texture2D" uid="uid://ryy22hwlr38d" path="res://Art/sname_body_turn.png" id="3_cwn1u"]
+[ext_resource type="Texture2D" uid="uid://chg2l7gvhemuq" path="res://Art/tail.png" id="4_n08i2"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4q7uv"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_uhkfg")
+"texture": ExtResource("2_uhhok")
 }],
 "loop": true,
 "name": &"body",
@@ -17,7 +17,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_li8rc")
+"texture": ExtResource("3_cwn1u")
 }],
 "loop": true,
 "name": &"corner",
@@ -25,7 +25,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_63apn")
+"texture": ExtResource("4_n08i2")
 }],
 "loop": true,
 "name": &"tail",

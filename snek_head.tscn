@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://b5ddevfrwr0q3"]
 
 [ext_resource type="Script" path="res://SnekHead.cs" id="1_gnshr"]
-[ext_resource type="Texture2D" uid="uid://cfln5kk5a3jy2" path="res://Art/snake_head.svg" id="3_plixl"]
+[ext_resource type="Texture2D" uid="uid://cqn1w54efw1ac" path="res://Art/snake_head.png" id="2_v5yl0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3awy"]
 size = Vector2(62, 62)
@@ -14,7 +14,7 @@ _initialBodyLength = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 1
-texture = ExtResource("3_plixl")
+texture = ExtResource("2_v5yl0")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_g3awy")
