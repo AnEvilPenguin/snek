@@ -20,6 +20,20 @@ public partial class Main : Node
 
     private Timer _timer;
 
+    public override void _Process(double delta)
+    {
+    }
+
+    public override void _Ready()
+    {
+        this._windowSize = this.GetTree().Root.Size;
+
+        this._head = this.GetNode<SnekHead>("SnekHead");
+        this._timer = this.GetNode<Timer>("Timer");
+
+        this.SpawnMouse();
+    }
+
     private void OnSnekHeadEnd(string type)
     {
         var label = this.GetNode<Label>("Label");
@@ -27,12 +41,12 @@ public partial class Main : Node
 
         label.Text = $"Game Over\n({type})";
 
-        _currentMouse.Visible = false;
+        this._currentMouse.Visible = false;
 
     }
 
     private Vector2 newMouseLocation() =>
-        newMouseLocation(0, _head.ListPositions());
+        this.newMouseLocation(0, this._head.ListPositions());
 
     private Vector2 newMouseLocation(int depth, List<Vector2> snakePositions)
     {
@@ -41,8 +55,8 @@ public partial class Main : Node
             GD.PrintErr("Failed to get new mouse location");
         }
 
-        var x = _random.Next((int)_windowSize.X - 66) + 1;
-        var y = _random.Next((int)_windowSize.Y - 66) + 1;
+        var x = this._random.Next((int)this._windowSize.X - 66) + 1;
+        var y = this._random.Next((int)this._windowSize.Y - 66) + 1;
 
         var position = Util.GetSnappedPosition(x, y);
 
@@ -56,12 +70,12 @@ public partial class Main : Node
 
         if (snakePositions.Contains(position))
         {
-            return newMouseLocation(depth + 1, snakePositions);
+            return this.newMouseLocation(depth + 1, snakePositions);
         }
 
-        if (position == _currentMouse.Position)
+        if (position == this._currentMouse.Position)
         {
-            return newMouseLocation(depth + 1, snakePositions);
+            return this.newMouseLocation(depth + 1, snakePositions);
         }
 
         return position;
@@ -69,37 +83,20 @@ public partial class Main : Node
 
     private void OnSnekHeadAteMouseEvent()
     {
-        _currentMouse.Position = newMouseLocation();
-        _score++;
+        this._currentMouse.Position = this.newMouseLocation();
+        this._score++;
 
-        if (_score % 5 == 0 && _timer.WaitTime > 0.1)
+        if (this._score % 5 == 0 && this._timer.WaitTime > 0.1)
         {
-            _timer.WaitTime = _timer.WaitTime - 0.1;
+            this._timer.WaitTime = this._timer.WaitTime - 0.1;
         }
-
-        // If overlapping move it?
-        // Could also just check for Snek positioning and re-roll if that fails?
     }
 
     private void SpawnMouse()
     {
-        _currentMouse = this.MouseScene.Instantiate<Mouse>();
-        _currentMouse.Position = newMouseLocation();
+        this._currentMouse = this.MouseScene.Instantiate<Mouse>();
+        this._currentMouse.Position = this.newMouseLocation();
 
-        this.AddChild(_currentMouse);
-    }
-
-    public override void _Process(double delta)
-    {
-    }
-
-    public override void _Ready()
-    {
-        _windowSize = GetTree().Root.Size;
-
-        _head = this.GetNode<SnekHead>("SnekHead");
-        _timer = this.GetNode<Timer>("Timer");
-
-        SpawnMouse();
+        this.AddChild(this._currentMouse);
     }
 }

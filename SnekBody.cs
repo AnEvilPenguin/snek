@@ -14,15 +14,13 @@ public partial class SnekBody : BodyPart
 
     private Turn _direction;
 
-    // private Vector2 _previousPosition = Vector2.Zero;
-
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         // We spawn under last body segment
         // this.Visible = false;
 
-        _sprite = this.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        this._sprite = this.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,25 +30,7 @@ public partial class SnekBody : BodyPart
 
     public void Rotate(float rotation)
     {
-        _sprite.Rotation = rotation;
-    }
-
-    private void turnSprite(Turn turn)
-    {
-        if (this.IsTail)
-        {
-            return;
-        }
-
-        if (turn == Turn.Stright)
-        {
-            _sprite.Play("body");
-            return;
-        }
-
-        _sprite.Play("corner");
-
-        _sprite.FlipH = turn == Turn.Clockwise;
+        this._sprite.Rotation = rotation;
     }
 
     public void AddMovement(Vector2 movement, Turn directon)
@@ -66,7 +46,7 @@ public partial class SnekBody : BodyPart
         this.NextBody = body;
         this.AddChild(body);
 
-        body.Rotate(_sprite.Rotation);
+        body.Rotate(this._sprite.Rotation);
         this._sprite.Play("body");
     }
 
@@ -89,8 +69,8 @@ public partial class SnekBody : BodyPart
             this.Visible = true;
         }
 
-        turnSprite(_direction);
-        RotateSprite(nextDirection, _sprite);
+        this.turnSprite(this._direction);
+        this.RotateSprite(nextDirection, this._sprite);
 
         Vector2 movement = (nextDirection * -1) * this._tileSize;
 
@@ -101,7 +81,25 @@ public partial class SnekBody : BodyPart
         if (this.NextBody != null)
         {
             this.NextBody.ExecuteMovement();
-            this.NextBody.AddMovement(nextDirection, _direction);
+            this.NextBody.AddMovement(nextDirection, this._direction);
         }
+    }
+
+    private void turnSprite(Turn turn)
+    {
+        if (this.IsTail)
+        {
+            return;
+        }
+
+        if (turn == Turn.Stright)
+        {
+            this._sprite.Play("body");
+            return;
+        }
+
+        this._sprite.Play("corner");
+
+        this._sprite.FlipH = turn == Turn.Clockwise;
     }
 }

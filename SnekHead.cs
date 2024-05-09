@@ -52,40 +52,12 @@ public partial class SnekHead : BodyPart
     {
         this.Position = Util.GetSnappedPosition(this.Position);
 
-        _sprite = this.GetNode<Sprite2D>("Sprite2D");
+        this._sprite = this.GetNode<Sprite2D>("Sprite2D");
 
         for (int i = 0; i < this._initialBodyLength; i++)
         {
             var newBody = this.NewBody();
             newBody.Position = new Vector2(-5000, -5000);
-        }
-    }
-
-    private void ProcessOverlap()
-    {
-        var areas = this.GetOverlappingAreas();
-
-        foreach (Area2D area in areas)
-        {
-            if (area.Name == "SnekBody")
-            {
-                this.EndGame();
-                EmitSignal(SignalName.End, "Ouroboros");
-            }
-
-            if (area.Name == "OutOfBounds")
-            {
-                this.EndGame();
-                EmitSignal(SignalName.End, "Out of Bounds");
-            }
-
-            if (area.Name == "Mouse" && !_hasEaten)
-            {
-                EmitSignal(SignalName.AteMouse);
-                this.NewBody();
-
-                _hasEaten = true;
-            }
         }
     }
 
@@ -128,8 +100,8 @@ public partial class SnekHead : BodyPart
 
     public Turn GetTurnType()
     {
-        int x = (int)(_nextDirection.X - _previousDirection.X);
-        int y = (int)(_nextDirection.Y + _previousDirection.Y);
+        int x = (int)(this._nextDirection.X - this._previousDirection.X);
+        int y = (int)(this._nextDirection.Y + this._previousDirection.Y);
         int turn = x * y;
 
         switch (turn)
@@ -145,7 +117,7 @@ public partial class SnekHead : BodyPart
     /// </summary>
     public void OnTimerTimeout()
     {
-        _hasEaten = false;
+        this._hasEaten = false;
 
         if (this._nextDirection == Vector2.Zero)
         {
@@ -154,8 +126,8 @@ public partial class SnekHead : BodyPart
 
         Vector2 movement = this.CalculateMovement(this._nextDirection);
 
-        Turn direction = GetTurnType();
-        RotateSprite(this._nextDirection, _sprite);
+        Turn direction = this.GetTurnType();
+        this.RotateSprite(this._nextDirection, this._sprite);
 
         this.Position = movement + this.Position;
 
@@ -169,7 +141,7 @@ public partial class SnekHead : BodyPart
 
         if (this.HasOverlappingAreas())
         {
-            ProcessOverlap();
+            this.ProcessOverlap();
         }
     }
 
@@ -201,5 +173,33 @@ public partial class SnekHead : BodyPart
         }
 
         return body;
+    }
+
+    private void ProcessOverlap()
+    {
+        var areas = this.GetOverlappingAreas();
+
+        foreach (Area2D area in areas)
+        {
+            if (area.Name == "SnekBody")
+            {
+                this.EndGame();
+                this.EmitSignal(SignalName.End, "Ouroboros");
+            }
+
+            if (area.Name == "OutOfBounds")
+            {
+                this.EndGame();
+                this.EmitSignal(SignalName.End, "Out of Bounds");
+            }
+
+            if (area.Name == "Mouse" && !this._hasEaten)
+            {
+                this.EmitSignal(SignalName.AteMouse);
+                this.NewBody();
+
+                this._hasEaten = true;
+            }
+        }
     }
 }
