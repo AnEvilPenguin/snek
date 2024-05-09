@@ -84,6 +84,8 @@ public partial class Main : Node
     private void OnSnekHeadAteMouseEvent()
     {
         this._currentMouse.Position = this.newMouseLocation();
+        this._currentMouse.RotateRandom();
+
         this._score++;
 
         if (this._score % 5 == 0 && this._timer.WaitTime > 0.1)
