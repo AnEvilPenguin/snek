@@ -19,6 +19,8 @@ public partial class SnekHead : BodyPart
 
     private Boolean _hasEaten = false;
 
+    private Vector2 _initialPosition;
+
     /// <summary>
     /// The next direction our snake will travel in.
     /// </summary>
@@ -50,14 +52,41 @@ public partial class SnekHead : BodyPart
     /// </summary>
     public override void _Ready()
     {
-        this.Position = Util.GetSnappedPosition(this.Position);
+        this._initialPosition = Util.GetSnappedPosition(this.Position);
 
         this._sprite = this.GetNode<Sprite2D>("Sprite2D");
+
+        this.Hide();
+    }
+
+    public void Start()
+    {
+        this.Position = this._initialPosition;
+
+        // (Re-)enable physics on start
+        this.GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
 
         for (int i = 0; i < this._initialBodyLength; i++)
         {
             var newBody = this.NewBody();
             newBody.Position = new Vector2(-5000, -5000);
+        }
+
+        this.Show();
+    }
+
+    public void Stop()
+    {
+        this.Position = this._initialPosition;
+
+        if (this._next != null)
+        {
+            // Queues body and all children for deletion
+            this._next.QueueFree();
+
+            // Clear up references
+            this._lastBody = null;
+            this._next = null;
         }
     }
 

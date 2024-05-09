@@ -10,7 +10,6 @@ script = ExtResource("1_4hk6l")
 MouseScene = ExtResource("2_uo4fu")
 
 [node name="Timer" type="Timer" parent="."]
-autostart = true
 
 [node name="SnekHead" parent="." instance=ExtResource("1_pmwe5")]
 position = Vector2(272, 383)
@@ -43,6 +42,7 @@ position = Vector2(-4, 0)
 polygon = PackedVector2Array(4, 0, -2, -6, 588, -6, 588, 839, -1, 838, -2, -4, 4, 2, 4, 832, 580, 832, 580, 0)
 
 [node name="Score" type="Label" parent="."]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -52,6 +52,20 @@ offset_bottom = 23.0
 grow_horizontal = 2
 text = "Score: 0"
 
+[node name="StartButton" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -46.5
+offset_top = -31.0
+offset_right = 46.5
+grow_horizontal = 2
+grow_vertical = 0
+text = "New Game"
+
 [connection signal="timeout" from="Timer" to="SnekHead" method="OnTimerTimeout"]
 [connection signal="AteMouse" from="SnekHead" to="." method="OnSnekHeadAteMouseEvent"]
 [connection signal="End" from="SnekHead" to="." method="OnSnekHeadEnd"]
+[connection signal="pressed" from="StartButton" to="." method="OnStartButtonPressed"]

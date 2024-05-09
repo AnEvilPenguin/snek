@@ -22,6 +22,10 @@ public partial class Main : Node
 
     private Label _scoreLabel;
 
+    private Label _gameOverLabel;
+
+    private Button _startButton;
+
     public override void _Process(double delta)
     {
     }
@@ -34,19 +38,46 @@ public partial class Main : Node
         this._timer = this.GetNode<Timer>("Timer");
 
         this._scoreLabel = this.GetNode<Label>("Score");
+        this._gameOverLabel = this.GetNode<Label>("Label");
+
+        this._startButton = this.GetNode<Button>("StartButton");
 
         this.SpawnMouse();
     }
 
+    private void OnStartButtonPressed()
+    {
+        this._gameOverLabel.Hide();
+        this._scoreLabel.Show();
+
+        this._score = 0;
+        this.UpdateScoreLabel();
+
+        this._head.Start();
+
+        this._timer.WaitTime = 1;
+        this._timer.Start();
+
+        this.newMouseLocation();
+        this._currentMouse.Show();
+
+        this._startButton.Hide();
+    }
+
     private void OnSnekHeadEnd(string type)
     {
-        var label = this.GetNode<Label>("Label");
-        label.Visible = true;
-
-        label.Text = $"Game Over\n({type})";
+        this._gameOverLabel.Text = $"Game Over\n({type})";
+        this._gameOverLabel.Show();
 
         this._currentMouse.Visible = false;
 
+        this._head.Stop();
+
+        this._timer.Stop();
+
+        this._currentMouse.Hide();
+
+        this._startButton.Show();
     }
 
     private Vector2 newMouseLocation() =>
@@ -91,7 +122,7 @@ public partial class Main : Node
         this._currentMouse.RotateRandom();
 
         this._score++;
-        this._scoreLabel.Text = $"Score: {this._score}";
+        this.UpdateScoreLabel();
 
         if (this._score % 5 == 0 && this._timer.WaitTime > 0.1)
         {
@@ -99,10 +130,14 @@ public partial class Main : Node
         }
     }
 
+    private void UpdateScoreLabel() =>
+        this._scoreLabel.Text = $"Score: {this._score}";
+
     private void SpawnMouse()
     {
         this._currentMouse = this.MouseScene.Instantiate<Mouse>();
         this._currentMouse.Position = this.newMouseLocation();
+        this._currentMouse.Hide();
 
         this.AddChild(this._currentMouse);
     }
