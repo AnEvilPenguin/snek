@@ -20,6 +20,8 @@ public partial class Main : Node
 
     private Timer _timer;
 
+    private Label _scoreLabel;
+
     public override void _Process(double delta)
     {
     }
@@ -30,6 +32,8 @@ public partial class Main : Node
 
         this._head = this.GetNode<SnekHead>("SnekHead");
         this._timer = this.GetNode<Timer>("Timer");
+
+        this._scoreLabel = this.GetNode<Label>("Score");
 
         this.SpawnMouse();
     }
@@ -87,6 +91,7 @@ public partial class Main : Node
         this._currentMouse.RotateRandom();
 
         this._score++;
+        this._scoreLabel.Text = $"Score: {this._score}";
 
         if (this._score % 5 == 0 && this._timer.WaitTime > 0.1)
         {

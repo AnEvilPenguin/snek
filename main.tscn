@@ -42,6 +42,16 @@ visible = false
 position = Vector2(-4, 0)
 polygon = PackedVector2Array(4, 0, -2, -6, 588, -6, 588, 839, -1, 838, -2, -4, 4, 2, 4, 832, 580, 832, 580, 0)
 
+[node name="Score" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "Score: 0"
+
 [connection signal="timeout" from="Timer" to="SnekHead" method="OnTimerTimeout"]
 [connection signal="AteMouse" from="SnekHead" to="." method="OnSnekHeadAteMouseEvent"]
 [connection signal="End" from="SnekHead" to="." method="OnSnekHeadEnd"]
