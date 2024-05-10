@@ -28,6 +28,8 @@ public partial class Main : Node
 
     private List<AudioStreamPlayer> _eatEffects = new List<AudioStreamPlayer>();
 
+    private List<AudioStreamPlayer> _deathEffects = new List<AudioStreamPlayer>();
+
     public override void _Process(double delta)
     {
     }
@@ -47,6 +49,10 @@ public partial class Main : Node
         this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat1"));
         this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat2"));
         this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat3"));
+
+        this._deathEffects.Add(this.GetNode<AudioStreamPlayer>("Death1"));
+        this._deathEffects.Add(this.GetNode<AudioStreamPlayer>("Death2"));
+        this._deathEffects.Add(this.GetNode<AudioStreamPlayer>("Death3"));
 
         this.SpawnMouse();
     }
@@ -72,6 +78,9 @@ public partial class Main : Node
 
     private void OnSnekHeadEnd(string type)
     {
+        int effectNumber = this._random.Next(0, this._deathEffects.Count);
+        this._deathEffects[effectNumber].Play();
+
         this._gameOverLabel.Text = $"Game Over\n({type})";
         this._gameOverLabel.Show();
 
