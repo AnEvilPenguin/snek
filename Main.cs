@@ -26,6 +26,8 @@ public partial class Main : Node
 
     private Button _startButton;
 
+    private List<AudioStreamPlayer> _eatEffects = new List<AudioStreamPlayer>();
+
     public override void _Process(double delta)
     {
     }
@@ -41,6 +43,10 @@ public partial class Main : Node
         this._gameOverLabel = this.GetNode<Label>("Label");
 
         this._startButton = this.GetNode<Button>("StartButton");
+
+        this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat1"));
+        this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat2"));
+        this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat3"));
 
         this.SpawnMouse();
     }
@@ -118,6 +124,9 @@ public partial class Main : Node
 
     private void OnSnekHeadAteMouseEvent()
     {
+        int effectNumber = this._random.Next(0, this._eatEffects.Count);
+        this._eatEffects[effectNumber].Play();
+
         this._currentMouse.Position = this.newMouseLocation();
         this._currentMouse.RotateRandom();
 
