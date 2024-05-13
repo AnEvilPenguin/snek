@@ -30,6 +30,8 @@ public partial class Main : Node
 
     private List<AudioStreamPlayer> _deathEffects = new List<AudioStreamPlayer>();
 
+    private SaveManager _save = new SaveManager();
+
     public override void _Process(double delta)
     {
     }
@@ -93,6 +95,18 @@ public partial class Main : Node
         this._currentMouse.Hide();
 
         this._startButton.Show();
+
+        this._save.AddScore(this._score, type);
+        this._save.getScores();
+    }
+
+    public override void _Notification(int what)
+    {
+        if (what == NotificationWMCloseRequest)
+        {
+            this._save.Persist();
+            GetTree().Quit(); // default behavior
+        }
     }
 
     private Vector2 newMouseLocation() =>
