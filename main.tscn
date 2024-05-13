@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://g46nneriyli7"]
+[gd_scene load_steps=13 format=3 uid="uid://g46nneriyli7"]
 
 [ext_resource type="Script" path="res://Main.cs" id="1_4hk6l"]
 [ext_resource type="PackedScene" uid="uid://b5ddevfrwr0q3" path="res://snek_head.tscn" id="1_pmwe5"]
@@ -10,6 +10,12 @@
 [ext_resource type="AudioStream" uid="uid://djeenxbq64ya4" path="res://Audio/death1.mp3" id="8_j7iko"]
 [ext_resource type="AudioStream" uid="uid://b20nebux7vldp" path="res://Audio/death2.mp3" id="9_iddqe"]
 [ext_resource type="AudioStream" uid="uid://bgouhwm8p3ptv" path="res://Audio/death3.mp3" id="10_pgwkq"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_7fpns"]
+action = &"ui_accept"
+
+[sub_resource type="Shortcut" id="Shortcut_cr6er"]
+events = [SubResource("InputEventAction_7fpns")]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_4hk6l")
@@ -69,6 +75,7 @@ offset_top = -31.0
 offset_right = 46.5
 grow_horizontal = 2
 grow_vertical = 0
+shortcut = SubResource("Shortcut_cr6er")
 text = "New Game"
 
 [node name="Eat1" type="AudioStreamPlayer" parent="."]
