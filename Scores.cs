@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Snek
@@ -19,7 +20,12 @@ namespace Snek
             this.GameOverReason = gameOverReason;
         }
 
-        // TODO toString?
+        public HighScore(int score, DateTime date, string gameOverReason)
+        {
+            this.Score = score;
+            this.Date = date;
+            this.GameOverReason = gameOverReason;
+        }
     }
 
     public class Scores
@@ -30,7 +36,7 @@ namespace Snek
 
         public Scores()
         {
-            Version = 1;
+            this.Version = 1;
         }
 
         public void addScore(int score, string gameOverReason)
@@ -48,6 +54,16 @@ namespace Snek
             }
 
             return sb.ToString();
+        }
+
+        public List <HighScore> GetScores(int top = 5)
+        {
+            var sorted = this.scores
+                .OrderByDescending(s => s.Score)
+                .Take(top)
+                .ToList();
+
+            return sorted;
         }
     }
 }

@@ -32,6 +32,10 @@ public partial class Main : Node
 
     private SaveManager _save = new SaveManager();
 
+    private GridContainer _scoreBoard;
+
+    private List<Label> _scoreList = new List<Label>();
+
     public override void _Process(double delta)
     {
     }
@@ -48,6 +52,8 @@ public partial class Main : Node
 
         this._startButton = this.GetNode<Button>("StartButton");
 
+        this._scoreBoard = this.GetNode<GridContainer>("GridContainer");
+
         this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat1"));
         this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat2"));
         this._eatEffects.Add(this.GetNode<AudioStreamPlayer>("Eat3"));
@@ -59,23 +65,36 @@ public partial class Main : Node
         this.SpawnMouse();
     }
 
+    public override void _Notification(int what)
+    {
+        if (what == NotificationWMCloseRequest)
+        {
+            this._save.Persist();
+            this.GetTree().Quit(); // default behavior
+        }
+    }
+
     private void OnStartButtonPressed()
     {
+        this._startButton.Hide();
         this._gameOverLabel.Hide();
+        this._scoreBoard.Hide();
+
         this._scoreLabel.Show();
+        this.NewMouseLocation();
+        this._currentMouse.Show();
+        this._head.Start();
 
         this._score = 0;
         this.UpdateScoreLabel();
 
-        this._head.Start();
-
         this._timer.WaitTime = 1;
         this._timer.Start();
 
-        this.newMouseLocation();
-        this._currentMouse.Show();
-
-        this._startButton.Hide();
+        foreach (var label in this._scoreList)
+        {
+            label.QueueFree();
+        }
     }
 
     private void OnSnekHeadEnd(string type)
@@ -97,22 +116,39 @@ public partial class Main : Node
         this._startButton.Show();
 
         this._save.AddScore(this._score, type);
-        this._save.getScores();
+
+        this.showScores();
     }
 
-    public override void _Notification(int what)
+    private void newScoreLabel(string text)
     {
-        if (what == NotificationWMCloseRequest)
-        {
-            this._save.Persist();
-            GetTree().Quit(); // default behavior
-        }
+        var label = new Label();
+        label.Text = text;
+        label.HorizontalAlignment = HorizontalAlignment.Center;
+
+        this._scoreList.Add(label);
+
+        this._scoreBoard.AddChild(label);
     }
 
-    private Vector2 newMouseLocation() =>
-        this.newMouseLocation(0, this._head.ListPositions());
+    private void showScores()
+    {
+        List<HighScore> top5 = this._save.GetScores(5);
 
-    private Vector2 newMouseLocation(int depth, List<Vector2> snakePositions)
+        foreach (HighScore score in top5)
+        {
+            this.newScoreLabel(score.Date.ToString());
+            this.newScoreLabel(score.Score.ToString());
+            this.newScoreLabel(score.GameOverReason);
+        }
+
+        this._scoreBoard.Show();
+    }
+
+    private Vector2 NewMouseLocation() =>
+        this.NewMouseLocation(0, this._head.ListPositions());
+
+    private Vector2 NewMouseLocation(int depth, List<Vector2> snakePositions)
     {
         if (depth > 10)
         {
@@ -134,12 +170,12 @@ public partial class Main : Node
 
         if (snakePositions.Contains(position))
         {
-            return this.newMouseLocation(depth + 1, snakePositions);
+            return this.NewMouseLocation(depth + 1, snakePositions);
         }
 
         if (position == this._currentMouse.Position)
         {
-            return this.newMouseLocation(depth + 1, snakePositions);
+            return this.NewMouseLocation(depth + 1, snakePositions);
         }
 
         return position;
@@ -150,7 +186,7 @@ public partial class Main : Node
         int effectNumber = this._random.Next(0, this._eatEffects.Count);
         this._eatEffects[effectNumber].Play();
 
-        this._currentMouse.Position = this.newMouseLocation();
+        this._currentMouse.Position = this.NewMouseLocation();
         this._currentMouse.RotateRandom();
 
         this._score++;
@@ -168,7 +204,7 @@ public partial class Main : Node
     private void SpawnMouse()
     {
         this._currentMouse = this.MouseScene.Instantiate<Mouse>();
-        this._currentMouse.Position = this.newMouseLocation();
+        this._currentMouse.Position = this.NewMouseLocation();
         this._currentMouse.Hide();
 
         this.AddChild(this._currentMouse);

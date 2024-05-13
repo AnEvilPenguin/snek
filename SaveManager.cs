@@ -1,9 +1,10 @@
-﻿using System;
-using System.Text.Json;
-using System.IO;
-
-namespace Snek
+﻿namespace Snek
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.Json;
+
     internal class SaveManager
     {
         private Scores _scores;
@@ -28,31 +29,18 @@ namespace Snek
             this._scores = JsonSerializer.Deserialize<Scores>(jsonString) ?? new Scores();
         }
 
-        public void AddScore(int score, string gameOverReason)
-        {
+        public void AddScore(int score, string gameOverReason) => 
             this._scores.addScore(score, gameOverReason);
-            // TODO add to list if not full
-            // TODO consider dropping scores if more than 5?
-        }
 
-        // TODO get top 5 scores
-        // TODO get most recent 5 scores?
-
-        public string getScores()
-        {
-            return this._scores.ToString();
-        }
+        public List<HighScore> GetScores(int top) =>
+            this._scores.GetScores(top);
 
         public void Persist()
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
             string jsonString = JsonSerializer.Serialize(this._scores, options);
 
-            File.WriteAllText(Path.Combine(_path, _fileName), jsonString);
+            File.WriteAllText(Path.Combine(this._path, this._fileName), jsonString);
         }
-
-        // TODO work out how to display high scores in UI.
-        // Look at GridContainer and ItemList
-        // Build these items into the control
     }
 }
