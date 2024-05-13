@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Snek
 {
@@ -20,6 +21,7 @@ namespace Snek
             this.GameOverReason = gameOverReason;
         }
 
+        [JsonConstructorAttribute]
         public HighScore(int score, DateTime date, string gameOverReason)
         {
             this.Score = score;
