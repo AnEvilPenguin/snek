@@ -24,7 +24,23 @@
 
             this._fileName = "Saves.json";
 
-            string jsonString = File.ReadAllText(Path.Combine(path, this._fileName));
+            string jsonString = string.Empty;
+
+            string fullpath = Path.Combine(path, this._fileName);
+
+            if (!File.Exists(fullpath))
+            {
+                return;
+            }
+
+            try
+            {
+                jsonString = File.ReadAllText(fullpath);
+            }
+            catch (Exception ex)
+            {
+                Godot.GD.Print(ex.ToString());
+            }
 
             this._scores = JsonSerializer.Deserialize<Scores>(jsonString) ?? new Scores();
         }
