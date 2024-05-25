@@ -3,7 +3,7 @@
 This is my take on the classic mobile game Snake.  
 The player will try to guide the snake to eat as many mice as possible. 
 The snake will move a singe cell in a selected direction periodically. 
-Every 5 mice the period in which the snake moves will reduce. 
+For every 5 mice eaten, the period between the snake's movements will reduce. 
 If no direction is selected (or the exact opposite direction to that last moved is selected) the snake will continue in a straight line. 
 The game is over if the snake eats its own tail, or leaves the map.
 
